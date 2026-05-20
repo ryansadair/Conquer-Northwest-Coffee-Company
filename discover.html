@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Discover the Pacific Northwest — waterfalls, mountains, lakes, and landmarks. Your adventure guide fueled by Conquer Northwest Coffee." />
+  <title>Discover the PNW | Conquer Northwest Coffee</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    .page-hero {
+      position: relative;
+      height: 60vh;
+      min-height: 440px;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 4rem;
+      overflow: hidden;
+    }
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(13,26,13,1) 0%, rgba(13,26,13,0.45) 55%, rgba(13,26,13,0.25) 100%),
+        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80') center/cover no-repeat;
+    }
+    .page-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+    /* Category nav */
+    .category-nav {
+      background: var(--forest);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky;
+      top: 72px;
+      z-index: 50;
+    }
+    .category-nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+    }
+    .cat-tab {
+      font-family: var(--font-head);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,239,230,0.5);
+      padding: 1.1rem 1.5rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .cat-tab:hover { color: var(--cream); }
+    .cat-tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+    /* Destination sections */
+    .dest-section { background: var(--deep); }
+    .dest-section:nth-child(even) { background: var(--forest); }
+    .dest-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .dest-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bark);
+    }
+    .dest-card-img {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .dest-card-img-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s ease;
+      filter: brightness(0.8) sepia(10%);
+    }
+    .dest-card:hover .dest-card-img-bg {
+      transform: scale(1.06);
+      filter: brightness(0.85) sepia(5%);
+    }
+    .dest-card-body {
+      padding: 1.2rem 1.4rem 1.5rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-top: none;
+    }
+    .dest-card-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--warm-white);
+      margin-bottom: 0.3rem;
+    }
+    .dest-card-location {
+      font-family: var(--font-head);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .dest-card-desc {
+      font-size: 0.85rem;
+      color: rgba(245,239,230,0.5);
+      line-height: 1.65;
+    }
+    .dest-card-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.8rem;
+    }
+    .dest-tag {
+      font-family: var(--font-head);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      border: 1px solid rgba(107,143,78,0.3);
+      padding: 0.2rem 0.55rem;
+    }
+    /* Featured article CTA */
+    .content-cta {
+      background: linear-gradient(135deg, var(--bark), var(--espresso));
+      border: 1px solid rgba(196,154,60,0.15);
+      padding: 3rem;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+    }
+    .content-cta p {
+      font-size: 0.95rem;
+      color: rgba(245,239,230,0.6);
+      max-width: 460px;
+      line-height: 1.7;
+      margin-top: 0.5rem;
+    }
+    @media (max-width: 800px) {
+      .dest-grid { grid-template-columns: repeat(2, 1fr); }
+      .content-cta { grid-template-columns: 1fr; }
+      .category-nav-inner { overflow-x: auto; }
+    }
+    @media (max-width: 500px) {
+      .dest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="/" class="nav-logo">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#c49a3c" opacity="0.9"/>
+      </svg>
+      Conquer <span class="logo-accent">&nbsp;NW</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="coffee.html">Coffee</a></li>
+      <li><a href="discover.html">Discover</a></li>
+      <li><a href="index.html#gear">Gear</a></li>
+      <li><a href="about.html">Our Story</a></li>
+      <li><a href="coffee.html" class="nav-cta">Shop Now</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu">
+    <a href="coffee.html">Coffee</a>
+    <a href="discover.html">Discover</a>
+    <a href="index.html#gear">Gear</a>
+    <a href="about.html">Our Story</a>
+    <a href="coffee.html" class="btn btn-primary" style="font-size:1.2rem;">Shop Now</a>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-content">
+      <p class="section-label" style="margin-bottom:0.5rem;">The Pacific Northwest</p>
+      <h1 class="hero-title" style="font-size: clamp(2.8rem, 7vw, 5.5rem); animation:none; opacity:1;">
+        Discover.<br><em>Conquer. Repeat.</em>
+      </h1>
+    </div>
+  </div>
+
+  <!-- Category Nav -->
+  <div class="category-nav">
+    <div class="category-nav-inner">
+      <a href="#mountains" class="cat-tab active">🏔️ Mountains</a>
+      <a href="#waterfalls" class="cat-tab">💧 Waterfalls</a>
+      <a href="#lakes" class="cat-tab">🏞️ Lakes</a>
+      <a href="#landmarks" class="cat-tab">🗿 Landmarks</a>
+    </div>
+  </div>
+
+  <!-- Mountains -->
+  <section class="dest-section" id="mountains">
+    <div class="section-inner">
+      <div class="dest-header">
+        <div>
+          <p class="section-label reveal">Peaks &amp; Summits</p>
+          <h2 class="section-title reveal" data-delay="80">Mountains</h2>
+        </div>
+        <p class="section-body reveal" style="max-width:340px; font-size:0.95rem;">
+          The Cascades and Olympics define the Pacific Northwest skyline. These are the summits worth chasing.
+        </p>
+      </div>
+
+      <div class="dest-grid">
+        <div class="dest-card reveal">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Mt. Hood</h3>
+            <p class="dest-card-location">Mt. Hood National Forest, OR</p>
+            <p class="dest-card-desc">Oregon's iconic volcano and the most climbed glaciated peak in the US. Year-round skiing, wildflower meadows, and Timberline Lodge.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Hiking</span><span class="dest-tag">Skiing</span><span class="dest-tag">11,249 ft</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="100">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Mt. Rainier</h3>
+            <p class="dest-card-location">Mt. Rainier National Park, WA</p>
+            <p class="dest-card-desc">The most glaciated peak in the lower 48. Wildflower trails in July, epic views from Paradise, and a summit that demands respect.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Mountaineering</span><span class="dest-tag">Wildflowers</span><span class="dest-tag">14,411 ft</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="200">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Three Sisters</h3>
+            <p class="dest-card-location">Deschutes National Forest, OR</p>
+            <p class="dest-card-desc">Three volcanic peaks rising above the Oregon High Desert. The surrounding wilderness has some of the finest backpacking in the state.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Backpacking</span><span class="dest-tag">Volcanic</span><span class="dest-tag">10,358 ft</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-cta reveal">
+        <div>
+          <p class="section-label" style="margin-bottom:0.4rem;">Gear Up</p>
+          <h3 style="font-family: var(--font-display); font-size:1.6rem; font-weight:700; color:var(--warm-white);">Before You Summit</h3>
+          <p>The right pack, layers, and a thermos of Deep Forest blend can turn a good hike into an unforgettable one. Browse our tested gear picks.</p>
+        </div>
+        <a href="index.html#gear" class="btn btn-primary" style="white-space:nowrap; flex-shrink:0;">View Gear Picks</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waterfalls -->
+  <section class="dest-section" id="waterfalls">
+    <div class="section-inner">
+      <div class="dest-header">
+        <div>
+          <p class="section-label reveal">Cascades &amp; Falls</p>
+          <h2 class="section-title reveal" data-delay="80">Waterfalls</h2>
+        </div>
+        <p class="section-body reveal" style="max-width:340px; font-size:0.95rem;">
+          The PNW has some of the most spectacular waterfalls in North America. These are our favorites.
+        </p>
+      </div>
+
+      <div class="dest-grid">
+        <div class="dest-card reveal">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Multnomah Falls</h3>
+            <p class="dest-card-location">Columbia River Gorge, OR</p>
+            <p class="dest-card-desc">Oregon's tallest waterfall at 620 feet. The bridge overlook is iconic, but the upper trail to the top is where you earn the view.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Day Hike</span><span class="dest-tag">620 ft</span><span class="dest-tag">Year-Round</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="100">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Silver Falls</h3>
+            <p class="dest-card-location">Silver Falls State Park, OR</p>
+            <p class="dest-card-desc">The Trail of Ten Falls loops past ten separate waterfalls, including the stunning walk-behind South Falls. Oregon's largest state park.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Loop Trail</span><span class="dest-tag">177 ft</span><span class="dest-tag">Family Friendly</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="200">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Sol Duc Falls</h3>
+            <p class="dest-card-location">Olympic National Park, WA</p>
+            <p class="dest-card-desc">A short old-growth hike through towering Douglas fir leads to this stunning split-channel waterfall in the heart of the Olympic Peninsula.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Old Growth</span><span class="dest-tag">48 ft</span><span class="dest-tag">Easy Hike</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lakes -->
+  <section class="dest-section" id="lakes">
+    <div class="section-inner">
+      <div class="dest-header">
+        <div>
+          <p class="section-label reveal">Alpine &amp; Volcanic Lakes</p>
+          <h2 class="section-title reveal" data-delay="80">Lakes</h2>
+        </div>
+        <p class="section-body reveal" style="max-width:340px; font-size:0.95rem;">
+          From volcanic calderas to alpine jewels, the Pacific Northwest has lakes that stop you in your tracks.
+        </p>
+      </div>
+
+      <div class="dest-grid">
+        <div class="dest-card reveal">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Crater Lake</h3>
+            <p class="dest-card-location">Crater Lake National Park, OR</p>
+            <p class="dest-card-desc">The deepest lake in the US, formed in the collapse of ancient Mt. Mazama. The blue is impossible to believe until you see it yourself.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Volcanic</span><span class="dest-tag">1,943 ft deep</span><span class="dest-tag">National Park</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="100">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Waldo Lake</h3>
+            <p class="dest-card-location">Willamette National Forest, OR</p>
+            <p class="dest-card-desc">One of the clearest and purest lakes in the world. The surrounding trails, paddling, and solitude make it a true Oregon gem.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Paddling</span><span class="dest-tag">Backpacking</span><span class="dest-tag">Ultra-Clear</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="200">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Diablo Lake</h3>
+            <p class="dest-card-location">North Cascades National Park, WA</p>
+            <p class="dest-card-desc">A reservoir fed by glacial meltwater, its distinctive turquoise color comes from fine glacial rock flour. The overlook view is one of the best in Washington.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Glacial</span><span class="dest-tag">Kayaking</span><span class="dest-tag">Scenic Drive</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Landmarks -->
+  <section class="dest-section" id="landmarks">
+    <div class="section-inner">
+      <div class="dest-header">
+        <div>
+          <p class="section-label reveal">Icons of the Region</p>
+          <h2 class="section-title reveal" data-delay="80">Landmarks</h2>
+        </div>
+        <p class="section-body reveal" style="max-width:340px; font-size:0.95rem;">
+          Coast, gorge, and high desert — the landmarks that define Pacific Northwest adventure.
+        </p>
+      </div>
+
+      <div class="dest-grid">
+        <div class="dest-card reveal">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Oregon Coast</h3>
+            <p class="dest-card-location">Pacific Coast, OR</p>
+            <p class="dest-card-desc">363 miles of publicly owned coastline. Haystack Rock, the Sea Lion Caves, Cape Perpetua — every mile different from the last.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Coastal</span><span class="dest-tag">363 Miles</span><span class="dest-tag">Public Access</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="100">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Columbia River Gorge</h3>
+            <p class="dest-card-location">Oregon / Washington Border</p>
+            <p class="dest-card-desc">A stunning basalt canyon carved by the Missoula Floods. Waterfalls, windsurfing, wildflower hikes, and dramatic viewpoints along the Historic Highway.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Scenic Drive</span><span class="dest-tag">Waterfalls</span><span class="dest-tag">Windsurfing</span></div>
+          </div>
+        </div>
+        <div class="dest-card reveal" data-delay="200">
+          <div class="dest-card-img">
+            <div class="dest-card-img-bg" style="background-image: url('https://images.unsplash.com/photo-1551632811-561732d1e306?w=700&q=80')"></div>
+          </div>
+          <div class="dest-card-body">
+            <h3 class="dest-card-name">Smith Rock</h3>
+            <p class="dest-card-location">Terrebonne, OR</p>
+            <p class="dest-card-desc">The birthplace of American sport climbing. Dramatic rhyolite and tuff spires rising 800 feet above the Crooked River. World-class climbing and hiking.</p>
+            <div class="dest-card-tags"><span class="dest-tag">Rock Climbing</span><span class="dest-tag">High Desert</span><span class="dest-tag">State Park</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-cta reveal" style="margin-top:2rem;">
+        <div>
+          <p class="section-label" style="margin-bottom:0.4rem;">Fuel Up</p>
+          <h3 style="font-family: var(--font-display); font-size:1.6rem; font-weight:700; color:var(--warm-white);">Ready to Conquer?</h3>
+          <p>Every adventure starts with a great cup. Grab a bag of your favorite blend and get out there.</p>
+        </div>
+        <a href="coffee.html" class="btn btn-primary" style="white-space:nowrap; flex-shrink:0;">Shop Coffee</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <p class="nav-logo" style="font-size:1.05rem; display:flex; align-items:center; gap:0.5rem;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#c49a3c"/></svg>
+          Conquer <span class="logo-accent">&nbsp;Northwest Coffee</span>
+        </p>
+        <p>Created for the adventurous, coffee-loving soul in all of us. Pacific Northwest born and brewed.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/conquernorthwestcoffee/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.facebook.com/conquernorthwestcoffee" target="_blank" rel="noopener" class="social-link" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="coffee.html">Coffee Blends</a>
+        <a href="discover.html">Discover PNW</a>
+        <a href="index.html#gear">Gear Picks</a>
+        <a href="about.html">Our Story</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="mailto:hello@conquernorthwestcoffee.com">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>©2025 Conquer Northwest Coffee Company, LLC. All Rights Reserved.</p>
+      <div style="display:flex; gap:1.5rem;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Category tab active state on scroll
+    const sections = ['mountains','waterfalls','lakes','landmarks'];
+    const tabs = document.querySelectorAll('.cat-tab');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 200) current = id;
+      });
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.getAttribute('href') === `#${current}`);
+      });
+    });
+  </script>
+</body>
+</html>

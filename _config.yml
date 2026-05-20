@@ -1,0 +1,15 @@
+title: Conquer Northwest Coffee
+description: Premium Pacific Northwest coffee for the adventurous soul.
+baseurl: ""
+url: "https://conquernorthwestcoffee.com"
+
+# Build settings
+theme: null
+plugins: []
+
+# Exclude files from build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules

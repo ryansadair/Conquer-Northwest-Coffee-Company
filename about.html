@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The story behind Conquer Northwest Coffee — two PNW outdoor enthusiasts who turned a passion for coffee and adventure into a brand." />
+  <title>Our Story | Conquer Northwest Coffee</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    .page-hero {
+      position: relative;
+      height: 55vh;
+      min-height: 420px;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 4rem;
+      overflow: hidden;
+    }
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(13,26,13,1) 0%, rgba(13,26,13,0.5) 50%, rgba(13,26,13,0.3) 100%),
+        url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1600&q=80') center/cover no-repeat;
+    }
+    .page-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+      margin-top: 4rem;
+    }
+    .value-item {
+      background: var(--forest);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .value-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .value-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warm-white);
+      margin-bottom: 0.6rem;
+    }
+    .value-desc {
+      font-size: 0.9rem;
+      color: rgba(245,239,230,0.55);
+      line-height: 1.7;
+    }
+    .team-section { background: var(--bark); }
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 3.5rem;
+    }
+    .team-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 2.5rem;
+    }
+    .team-name {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--warm-white);
+      margin-bottom: 0.3rem;
+    }
+    .team-role {
+      font-family: var(--font-head);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .team-bio {
+      font-size: 0.95rem;
+      color: rgba(245,239,230,0.6);
+      line-height: 1.8;
+    }
+    @media (max-width: 700px) {
+      .values-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="/" class="nav-logo">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#c49a3c" opacity="0.9"/>
+      </svg>
+      Conquer <span class="logo-accent">&nbsp;NW</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="coffee.html">Coffee</a></li>
+      <li><a href="discover.html">Discover</a></li>
+      <li><a href="index.html#gear">Gear</a></li>
+      <li><a href="about.html">Our Story</a></li>
+      <li><a href="coffee.html" class="nav-cta">Shop Now</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu">
+    <a href="coffee.html">Coffee</a>
+    <a href="discover.html">Discover</a>
+    <a href="index.html#gear">Gear</a>
+    <a href="about.html">Our Story</a>
+    <a href="coffee.html" class="btn btn-primary" style="font-size:1.2rem;">Shop Now</a>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-content">
+      <p class="section-label" style="margin-bottom:0.5rem;">Who We Are</p>
+      <h1 class="hero-title" style="font-size: clamp(2.8rem, 7vw, 5.5rem); animation:none; opacity:1;">
+        Born from the<br><em>Northwest.</em>
+      </h1>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <section style="background: var(--deep);">
+    <div class="section-inner">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;">
+        <div>
+          <p class="section-label reveal">Our Mission</p>
+          <h2 class="section-title reveal" data-delay="100">More than<br><em>a coffee company.</em></h2>
+          <p class="section-body reveal" data-delay="200">
+            Conquer Northwest was built at the intersection of two passions: exceptional coffee and the rugged beauty of the Pacific Northwest. We started as a small family roastery, sourcing and developing blends for years before sharing them with the world.
+          </p>
+          <p class="section-body reveal" data-delay="280" style="margin-top:1rem;">
+            Although we're a coffee company at heart, our deeper purpose is to inspire people to get outside. The mountains, forests, coastlines, and waterways of the PNW are worth protecting — and worth experiencing.
+          </p>
+          <p class="section-body reveal" data-delay="360" style="margin-top:1rem;">
+            We are humbled and honored to supply the coffee that fuels your adventures.
+          </p>
+          <p class="story-attribution reveal" data-delay="420" style="padding-left:0; margin-top:1.5rem;">— Ryan &amp; Kaitlyn Adair</p>
+        </div>
+        <div class="reveal" data-delay="200">
+          <img
+            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80"
+            alt="Coffee being poured"
+            style="width:100%; object-fit:cover; filter:sepia(15%) brightness(0.85);"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      <!-- Values -->
+      <div class="values-grid">
+        <div class="value-item reveal">
+          <div class="value-icon">🌱</div>
+          <h3 class="value-title">Sustainability</h3>
+          <p class="value-desc">One tree planted per order through One Tree Planted. Over 838 trees and counting in the Pacific Northwest.</p>
+        </div>
+        <div class="value-item reveal" data-delay="100">
+          <div class="value-icon">🗻</div>
+          <h3 class="value-title">Adventure</h3>
+          <p class="value-desc">Coffee is the fuel. The mountains, waterfalls, and forests of the PNW are the destination. Get outside.</p>
+        </div>
+        <div class="value-item reveal" data-delay="200">
+          <div class="value-icon">☕</div>
+          <h3 class="value-title">Quality</h3>
+          <p class="value-desc">High-altitude sourced beans. Small batches. Shipped fresh. Consistent flavor in every single cup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="team-section">
+    <div class="section-inner">
+      <p class="section-label reveal">The Team</p>
+      <h2 class="section-title reveal" data-delay="100">The People<br><em>Behind the Cup.</em></h2>
+
+      <div class="team-grid">
+        <div class="team-card reveal" data-delay="100">
+          <h3 class="team-name">Ryan Adair</h3>
+          <p class="team-role">Co-Founder · Roaster · Trail Runner</p>
+          <p class="team-bio">
+            Born and raised in the Pacific Northwest, Ryan has spent years developing the blends and roast profiles that define Conquer Northwest. When he's not behind the roaster, he's logging miles on PNW trails and chasing the next summit.
+          </p>
+        </div>
+        <div class="team-card reveal" data-delay="200">
+          <h3 class="team-name">Kaitlyn Adair</h3>
+          <p class="team-role">Co-Founder · Brand &amp; Creative</p>
+          <p class="team-bio">
+            The creative heart behind Conquer Northwest, Kaitlyn shapes the brand identity and visual storytelling that brings the PNW spirit to life. A true Northwest soul with an eye for what makes the region worth celebrating.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pledge -->
+  <section class="pledge-section">
+    <div class="section-label reveal" style="text-align:center;">Our Pledge</div>
+    <h2 class="section-title reveal" data-delay="100" style="text-align:center; margin:0 auto 1rem;">
+      Every Order.<br><em>One More Tree.</em>
+    </h2>
+    <p class="section-body reveal" data-delay="200" style="text-align:center; margin:0 auto 2rem; max-width:520px;">
+      We believe sustainability is the key to keeping our forests green and lakes blue. Every coffee order triggers a tree planted in the Pacific Northwest.
+    </p>
+    <div class="pledge-counter reveal" data-delay="300">
+      <div><div class="pledge-num">0</div></div>
+      <div class="pledge-label">Trees<br>Planted<br><span style="opacity:0.6; font-weight:400;">& counting</span></div>
+    </div>
+    <div class="reveal" data-delay="400">
+      <a href="https://onetreeplanted.org/pages/why-trees" target="_blank" rel="noopener" class="btn btn-outline">
+        Learn About One Tree Planted
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <p class="nav-logo" style="font-size:1.05rem; display:flex; align-items:center; gap:0.5rem;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#c49a3c"/></svg>
+          Conquer <span class="logo-accent">&nbsp;Northwest Coffee</span>
+        </p>
+        <p>Created for the adventurous, coffee-loving soul in all of us. Pacific Northwest born and brewed.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/conquernorthwestcoffee/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.facebook.com/conquernorthwestcoffee" target="_blank" rel="noopener" class="social-link" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="coffee.html">Coffee Blends</a>
+        <a href="discover.html">Discover PNW</a>
+        <a href="index.html#gear">Gear Picks</a>
+        <a href="about.html">Our Story</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="mailto:hello@conquernorthwestcoffee.com">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>©2025 Conquer Northwest Coffee Company, LLC. All Rights Reserved.</p>
+      <div style="display:flex; gap:1.5rem;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
