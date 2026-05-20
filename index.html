@@ -1,611 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Average Pace</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap');
-
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface2: #1c1c27;
-    --border: #2a2a3a;
-    --accent: #e8ff47;
-    --accent2: #47c9ff;
-    --accent3: #ff6b6b;
-    --text: #f0f0f8;
-    --muted: #6b6b8a;
-    --green: #4dff91;
-    --item-h: 44px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    min-height: 100dvh;
-    overflow-x: hidden;
-  }
-
-  .app {
-    max-width: 430px;
-    margin: 0 auto;
-    padding: 0 0 80px 0;
-    min-height: 100dvh;
-  }
-
-  /* ── Header ── */
-  .header {
-    padding: 48px 16px 10px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: linear-gradient(to bottom, var(--bg) 85%, transparent);
-  }
-  .header-top { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
-  .logo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
-  .logo span { color: var(--text); }
-  .subtitle { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-
-  .section-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-
-  /* ── Target Pace ── */
-  .target-section { padding: 0 16px 12px; }
-  .target-row {
-    display: flex; align-items: center; gap: 10px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 10px 14px;
-  }
-  .target-label { font-size: 11px; color: var(--muted); flex: 1; }
-  .pace-inputs { display: flex; align-items: center; gap: 5px; }
-  .pace-input {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 7px;
-    color: var(--accent); font-family: 'DM Mono', monospace; font-size: 19px; font-weight: 500;
-    text-align: center; width: 48px; padding: 6px 2px;
-    -webkit-appearance: none; appearance: none; outline: none;
-  }
-  .pace-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(232,255,71,.12); }
-  .pace-sep { color: var(--accent); font-size: 20px; font-weight: 500; }
-  .pace-unit { font-size: 10px; color: var(--muted); margin-left: 2px; }
-
-  /* ── Miles section ── */
-  .miles-section { padding: 0 16px 12px; }
-  .miles-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .clear-btn { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; padding: 3px 6px; border-radius: 5px; }
-  .clear-btn:active { color: var(--accent3); }
-  .mile-rows { display: flex; flex-direction: column; gap: 6px; }
-
-  /* ── Mile card ── */
-  .mile-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    overflow: hidden;
-    animation: slideIn .18s ease;
-  }
-  @keyframes slideIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
-
-  .mile-card-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 9px 12px;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .mile-num { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; min-width: 44px; }
-  .mile-pace-preview { font-size: 18px; font-weight: 500; color: var(--accent2); letter-spacing: .02em; }
-
-  .mile-del {
-    background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer;
-    padding: 1px 5px; border-radius: 5px; line-height: 1;
-  }
-  .mile-del:active { color: var(--accent3); }
-
-  /* ── Drum picker ── */
-  .drum-wrap {
-    display: none;
-    padding: 6px 14px 14px;
-    border-top: 1px solid var(--border);
-    background: var(--surface2);
-    justify-content: center;
-    align-items: center;
-  }
-  .drum-wrap.open { display: flex; }
-
-  .drum-label { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 5px; }
-
-  .drum-outer {
-    position: relative;
-    width: 84px;
-    height: calc(var(--item-h) * 3);
-    overflow: hidden;
-    cursor: grab;
-    border-radius: 10px;
-  }
-  .drum-outer:active { cursor: grabbing; }
-  .drum-outer::before, .drum-outer::after {
-    content: ''; position: absolute; left: 0; right: 0; z-index: 2; pointer-events: none;
-    height: var(--item-h);
-  }
-  .drum-outer::before { top: 0; background: linear-gradient(to bottom, var(--surface2) 5%, transparent); }
-  .drum-outer::after  { bottom: 0; background: linear-gradient(to top, var(--surface2) 5%, transparent); }
-
-  .drum-selector {
-    position: absolute; top: var(--item-h); left: 8px; right: 8px; height: var(--item-h);
-    border-top: 1px solid rgba(71,201,255,.35); border-bottom: 1px solid rgba(71,201,255,.35);
-    background: rgba(71,201,255,.06); border-radius: 8px; pointer-events: none; z-index: 1;
-  }
-
-  .drum-list { display: flex; flex-direction: column; will-change: transform; }
-
-  .drum-item {
-    height: var(--item-h); display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 500;
-    color: var(--muted); flex-shrink: 0; user-select: none;
-    transition: color .08s, transform .08s;
-  }
-  .drum-item.selected { color: var(--text); transform: scale(1.12); }
-
-  .drum-colon { font-size: 28px; font-weight: 500; color: var(--muted); padding: 0 2px; align-self: center; margin-top: 16px; }
-  .drum-col { display: flex; flex-direction: column; align-items: center; }
-
-  /* ── Add mile ── */
-  .add-mile-btn {
-    display: flex; align-items: center; justify-content: center; gap: 7px;
-    width: 100%; padding: 11px;
-    background: none; border: 1px dashed var(--border); border-radius: 10px;
-    color: var(--muted); font-family: 'DM Mono', monospace; font-size: 12px;
-    cursor: pointer; margin-top: 6px;
-    -webkit-appearance: none; appearance: none; outline: none;
-  }
-  .add-mile-btn:active { border-color: var(--accent); color: var(--accent); }
-
-  /* ── Results ── */
-  .results-section { padding: 0 16px; }
-  .results-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
-
-  .results-header {
-    padding: 9px 14px 8px; border-bottom: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .results-title { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-  .avg-badge { font-size: 11px; color: var(--text); }
-  .avg-badge .avg-val { color: var(--accent2); font-weight: 500; }
-
-  /* ── Distance rows (compact single-line) ── */
-  .dist-row {
-    display: flex; align-items: center;
-    padding: 7px 14px;
-    border-bottom: 1px solid var(--border);
-    gap: 6px;
-  }
-  .dist-row:last-child { border-bottom: none; }
-  .dist-row.dimmed { opacity: 0.38; }
-
-  .dist-label {
-    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-    color: var(--text); min-width: 36px;
-  }
-  .dist-sub { font-size: 9px; color: var(--muted); min-width: 28px; }
-
-  .dist-req { font-size: 16px; font-weight: 500; min-width: 56px; }
-  .dist-req.good   { color: var(--green); }
-  .dist-req.warn   { color: var(--accent); }
-  .dist-req.bad    { color: var(--accent3); }
-  .dist-req.neutral { color: var(--muted); }
-
-  .dist-spacer { flex: 1; }
-
-  .dist-proj { font-size: 11px; color: var(--muted); text-align: right; }
-  .dist-proj span { color: var(--text); }
-
-  .dist-done {
-    font-size: 9px; letter-spacing: .07em; text-transform: uppercase;
-    color: var(--green); background: rgba(77,255,145,.1);
-    border: 1px solid rgba(77,255,145,.22); border-radius: 20px; padding: 2px 7px;
-  }
-
-  .progress-bar-wrap { height: 2px; background: var(--surface2); flex-shrink: 0; width: 40px; border-radius: 2px; overflow: hidden; align-self: center; }
-  .progress-bar-fill { height: 100%; border-radius: 2px; }
-
-  .no-data { padding: 22px 14px; text-align: center; color: var(--muted); font-size: 11px; line-height: 1.8; }
-
-  /* ── Confirm button ── */
-  .confirm-btn {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    width: calc(100% - 28px); margin: 0 14px 14px;
-    padding: 11px;
-    background: var(--accent); border: none; border-radius: 9px;
-    color: var(--bg); font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500;
-    cursor: pointer; letter-spacing: .04em;
-    -webkit-appearance: none; appearance: none; outline: none;
-  }
-  .confirm-btn:active { opacity: .85; }
-  .mile-pace-preview.pending { color: var(--muted); font-style: italic; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Conquer Northwest Coffee — Premium Pacific Northwest coffee for the adventurous soul. Explore PNW trails, waterfalls, and mountains fueled by exceptional coffee." />
+  <meta property="og:title" content="Conquer Northwest Coffee | Fuel Your Adventure" />
+  <meta property="og:description" content="Premium Pacific Northwest coffee for the adventurous soul. A tree planted with every order." />
+  <meta property="og:type" content="website" />
+  <title>Conquer Northwest Coffee | Fuel Your Adventure</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 <body>
-<div class="app">
 
-  <div class="header">
-    <div class="header-top"><div class="logo">AVERAGE<span> PACE</span></div></div>
-    <div class="subtitle">Real-time split calculator</div>
+  <!-- =====================
+       NAV
+  ===================== -->
+  <nav class="nav" id="nav">
+    <a href="/" class="nav-logo">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#c49a3c" opacity="0.9"/>
+      </svg>
+      Conquer <span class="logo-accent">&nbsp;NW</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#blends">Coffee</a></li>
+      <li><a href="#discover">Discover</a></li>
+      <li><a href="#gear">Gear</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#shop" class="nav-cta">Shop Now</a></li>
+    </ul>
+
+    <button class="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <a href="#blends">Coffee</a>
+    <a href="#discover">Discover</a>
+    <a href="#gear">Gear</a>
+    <a href="#story">Our Story</a>
+    <a href="#shop" class="btn btn-primary" style="font-size:1.2rem;">Shop Now</a>
   </div>
 
-  <div class="target-section">
-    <div class="section-label">Goal pace</div>
-    <div class="target-row">
-      <div class="target-label">Target min/mile</div>
-      <div class="pace-inputs">
-        <input class="pace-input" id="tgt-min" type="number" min="4" max="20" value="9" inputmode="numeric">
-        <span class="pace-sep">:</span>
-        <input class="pace-input" id="tgt-sec" type="number" min="0" max="59" value="00" inputmode="numeric">
-        <span class="pace-unit">/mi</span>
+  <!-- =====================
+       PLEDGE BANNER
+  ===================== -->
+  <div class="pledge-banner">
+    <p>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#f5efe6" style="flex-shrink:0"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/></svg>
+      🌲 A tree is planted in the Pacific Northwest with every order
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#f5efe6" style="flex-shrink:0"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/></svg>
+    </p>
+  </div>
+
+  <!-- =====================
+       HERO
+  ===================== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Pacific Northwest · Est. 2021</p>
+      <h1 class="hero-title">
+        Fuel Your<br><em>Next Adventure.</em>
+      </h1>
+      <p class="hero-sub">
+        Premium small-batch coffee roasted for the adventurous soul. From the peaks of the Cascades to your morning cup — conquer every day.
+      </p>
+      <div class="hero-actions">
+        <a href="#shop" class="btn btn-primary">
+          Shop Coffee
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#discover" class="btn btn-outline">Explore the PNW</a>
       </div>
     </div>
-  </div>
 
-  <div class="miles-section">
-    <div class="miles-header">
-      <div class="section-label">Miles completed</div>
-      <button class="clear-btn" onclick="clearAll()">Clear all</button>
+    <div class="hero-badge">
+      <div class="hero-badge-inner">
+        <svg width="70" height="70" viewBox="0 0 70 70">
+          <path id="circlePath" d="M 35,35 m -26,0 a 26,26 0 1,1 52,0 a 26,26 0 1,1 -52,0" fill="none"/>
+          <text font-family="'Barlow Condensed', sans-serif" font-size="7.5" font-weight="700" letter-spacing="2" fill="#c49a3c" text-anchor="middle">
+            <textPath href="#circlePath" startOffset="50%">
+              SMALL BATCH · FRESH ROASTED · PNW PROUD ·
+            </textPath>
+          </text>
+          <text x="35" y="32" text-anchor="middle" font-family="'Playfair Display', serif" font-size="14" font-weight="900" fill="#f5efe6">838</text>
+          <text x="35" y="43" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="6.5" font-weight="600" letter-spacing="1.5" fill="#c49a3c">TREES</text>
+          <text x="35" y="51" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="6.5" font-weight="600" letter-spacing="1.5" fill="#c49a3c">PLANTED</text>
+        </svg>
+      </div>
     </div>
-    <div class="mile-rows" id="mile-rows"></div>
-    <button class="add-mile-btn" onclick="addMile()">
-      <span style="font-size:16px;line-height:1">+</span> Log mile
-    </button>
-  </div>
 
-  <div class="results-section">
-    <div class="section-label" style="margin-bottom:8px">Required pace by distance</div>
-    <div class="results-card" id="results-card">
-      <div class="no-data">Log your first mile<br>to see required pace</div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">Scroll</span>
     </div>
-  </div>
+  </section>
 
-</div>
-<script>
-// ─── Distances: 2 through 13 miles ──────────────────────────────────────────
-const DISTANCES = Array.from({length: 12}, (_, i) => i + 2); // [2,3,...,13]
+  <!-- =====================
+       BLENDS
+  ===================== -->
+  <section class="blends-section" id="blends">
+    <div class="section-inner">
+      <p class="section-label reveal">Conquer Blends</p>
+      <h2 class="section-title reveal" data-delay="100">Crafted for the<br><em>Journey Ahead.</em></h2>
+      <p class="section-body reveal" data-delay="200">
+        Each blend is inspired by a corner of the Pacific Northwest we love. Small-batch sourced from high-altitude farms in South America, roasted to bring out every layer of the landscape.
+      </p>
+    </div>
 
-const MINS = Array.from({length: 17}, (_, i) => i + 4); // 4–20
-const SECS = Array.from({length: 60}, (_, i) => i);     // 0–59
+    <div class="blends-grid" id="shop">
 
-// miles[] holds confirmed splits used for calculations
-// pending{} holds the in-progress drum values for the open card, not yet confirmed
-let miles = [];
-let openCardIdx = null;
-let pending = null; // { min, sec } — draft for the currently open card
-
-// ─── Drum builder ────────────────────────────────────────────────────────────
-function buildDrum(values, initialVal, onChange) {
-  const ITEM_H = 44;
-  const pad2 = v => String(v).padStart(2, '0');
-
-  const outer = document.createElement('div');
-  outer.className = 'drum-outer';
-
-  const selBand = document.createElement('div');
-  selBand.className = 'drum-selector';
-  outer.appendChild(selBand);
-
-  const list = document.createElement('div');
-  list.className = 'drum-list';
-  list.style.transform = 'translateY(0px)';
-
-  const blankTop = document.createElement('div');
-  blankTop.className = 'drum-item';
-  list.appendChild(blankTop);
-
-  const items = values.map(v => {
-    const el = document.createElement('div');
-    el.className = 'drum-item';
-    el.textContent = pad2(v);
-    list.appendChild(el);
-    return { el, v };
-  });
-
-  const blankBot = document.createElement('div');
-  blankBot.className = 'drum-item';
-  list.appendChild(blankBot);
-
-  outer.appendChild(list);
-
-  let currentIdx = Math.max(0, values.indexOf(initialVal));
-
-  function snapTo(idx, animate) {
-    idx = Math.max(0, Math.min(values.length - 1, idx));
-    currentIdx = idx;
-    list.style.transition = animate ? 'transform .15s cubic-bezier(.25,.46,.45,.94)' : 'none';
-    list.style.transform = `translateY(${-idx * ITEM_H}px)`;
-    if (!animate) list.getBoundingClientRect();
-    items.forEach((it, i) => it.el.classList.toggle('selected', i === idx));
-    onChange(values[idx]);
-  }
-
-  let dragStartY = 0, dragStartIdx = 0, dragging = false;
-  let lastY = 0, lastT = 0, velY = 0;
-
-  function startDrag(y) {
-    dragging = true; dragStartY = y; dragStartIdx = currentIdx;
-    lastY = y; lastT = performance.now(); velY = 0;
-    list.style.transition = 'none';
-  }
-  function moveDrag(y) {
-    if (!dragging) return;
-    const now = performance.now(), dt = now - lastT;
-    if (dt > 0) velY = (y - lastY) / dt;
-    lastY = y; lastT = now;
-    const idx = Math.max(0, Math.min(values.length - 1, Math.round(dragStartIdx + (dragStartY - y) / ITEM_H)));
-    if (idx !== currentIdx) {
-      currentIdx = idx;
-      list.style.transform = `translateY(${-idx * ITEM_H}px)`;
-      items.forEach((it, i) => it.el.classList.toggle('selected', i === idx));
-      onChange(values[idx]);
-      try { if (navigator.vibrate) navigator.vibrate(3); } catch(e) {}
-    }
-  }
-  function endDrag() {
-    if (!dragging) return;
-    dragging = false;
-    snapTo(Math.round(currentIdx + (-velY * 120) / ITEM_H), true);
-  }
-
-  outer.addEventListener('touchstart',  e => startDrag(e.touches[0].clientY), {passive:true});
-  outer.addEventListener('touchmove',   e => { e.preventDefault(); moveDrag(e.touches[0].clientY); }, {passive:false});
-  outer.addEventListener('touchend',    endDrag, {passive:true});
-  outer.addEventListener('touchcancel', endDrag, {passive:true});
-  outer.addEventListener('mousedown',   e => { e.preventDefault(); startDrag(e.clientY); });
-  window.addEventListener('mousemove',  e => moveDrag(e.clientY));
-  window.addEventListener('mouseup',    endDrag);
-  outer.addEventListener('wheel', e => {
-    e.preventDefault();
-    snapTo(currentIdx + (e.deltaY > 0 ? 1 : -1), true);
-  }, {passive:false});
-
-  snapTo(currentIdx, false);
-  return outer;
-}
-
-// ─── Mile cards ──────────────────────────────────────────────────────────────
-function previewStr(m) {
-  return `${m.min}:${String(m.sec).padStart(2,'0')}`;
-}
-
-function confirmMile(idx) {
-  if (!pending) return;
-  miles[idx] = { ...pending };
-  pending = null;
-  openCardIdx = null;
-  renderMiles();
-  renderResults();
-}
-
-function renderMiles() {
-  const container = document.getElementById('mile-rows');
-  container.innerHTML = '';
-
-  miles.forEach((m, i) => {
-    const isOpen = openCardIdx === i;
-    // use pending draft for display if this card is open
-    const displayVal = (isOpen && pending) ? pending : m;
-    const isUnconfirmed = isOpen && pending &&
-      (pending.min !== m.min || pending.sec !== m.sec);
-
-    const card = document.createElement('div');
-    card.className = 'mile-card';
-
-    const header = document.createElement('div');
-    header.className = 'mile-card-header';
-
-    const numEl = document.createElement('div');
-    numEl.className = 'mile-num';
-    numEl.textContent = `Mile ${i + 1}`;
-
-    const preview = document.createElement('div');
-    // show confirmed value in header always; pending shown inside drum area
-    preview.className = 'mile-pace-preview';
-    preview.textContent = `${previewStr(m)} /mi`;
-
-    const delBtn = document.createElement('button');
-    delBtn.className = 'mile-del';
-    delBtn.textContent = '×';
-    delBtn.addEventListener('click', e => { e.stopPropagation(); deleteMile(i); });
-
-    header.appendChild(numEl);
-    header.appendChild(preview);
-    header.appendChild(delBtn);
-    card.appendChild(header);
-
-    const drumWrap = document.createElement('div');
-    drumWrap.className = 'drum-wrap' + (isOpen ? ' open' : '');
-
-    if (isOpen) {
-      // init pending to current confirmed value when first opening
-      if (!pending) pending = { ...m };
-
-      const minCol = document.createElement('div');
-      minCol.className = 'drum-col';
-      const minLbl = document.createElement('div');
-      minLbl.className = 'drum-label';
-      minLbl.textContent = 'min';
-      minCol.appendChild(minLbl);
-      minCol.appendChild(buildDrum(MINS, pending.min, val => {
-        pending.min = val;
-      }));
-
-      const colon = document.createElement('div');
-      colon.className = 'drum-colon';
-      colon.textContent = ':';
-
-      const secCol = document.createElement('div');
-      secCol.className = 'drum-col';
-      const secLbl = document.createElement('div');
-      secLbl.className = 'drum-label';
-      secLbl.textContent = 'sec';
-      secCol.appendChild(secLbl);
-      secCol.appendChild(buildDrum(SECS, pending.sec, val => {
-        pending.sec = val;
-      }));
-
-      drumWrap.appendChild(minCol);
-      drumWrap.appendChild(colon);
-      drumWrap.appendChild(secCol);
-
-      // ── Confirm button ──
-      const confirmBtn = document.createElement('button');
-      confirmBtn.className = 'confirm-btn';
-      confirmBtn.innerHTML = `✓ &nbsp;Save Mile ${i + 1}`;
-      confirmBtn.addEventListener('click', e => { e.stopPropagation(); confirmMile(i); });
-      card.appendChild(drumWrap);
-      card.appendChild(confirmBtn);
-    } else {
-      card.appendChild(drumWrap);
-    }
-
-    header.addEventListener('click', () => {
-      if (openCardIdx === i) {
-        // closing without confirming — discard pending
-        openCardIdx = null;
-        pending = null;
-      } else {
-        openCardIdx = i;
-        pending = { ...miles[i] }; // seed pending from confirmed value
-      }
-      renderMiles();
-    });
-
-    container.appendChild(card);
-  });
-
-  renderResults();
-}
-
-// ─── CRUD ────────────────────────────────────────────────────────────────────
-function addMile() {
-  const tMin = parseInt(document.getElementById('tgt-min').value) || 9;
-  const tSec = parseInt(document.getElementById('tgt-sec').value) || 0;
-  miles.push({ min: tMin, sec: tSec });
-  openCardIdx = miles.length - 1;
-  pending = { min: tMin, sec: tSec };
-  renderMiles();
-}
-function deleteMile(idx) {
-  miles.splice(idx, 1);
-  if (openCardIdx === idx) { openCardIdx = null; pending = null; }
-  else if (openCardIdx > idx) openCardIdx--;
-  renderMiles();
-}
-function clearAll() {
-  miles = []; openCardIdx = null; pending = null; renderMiles();
-}
-
-// ─── Pace math ───────────────────────────────────────────────────────────────
-function paceToSecs(min, sec) { return (parseInt(min)||0)*60 + (parseInt(sec)||0); }
-function secsToStr(s) {
-  if (!isFinite(s) || s <= 0) return '--:--';
-  return `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
-}
-function getTargetSecs() {
-  return paceToSecs(document.getElementById('tgt-min').value, document.getElementById('tgt-sec').value);
-}
-
-function calcForDist(dist) {
-  const valid = miles.filter(m => paceToSecs(m.min, m.sec) > 0);
-  if (!valid.length) return null;
-  const elapsed = valid.reduce((s,m) => s + paceToSecs(m.min, m.sec), 0);
-  const avg = elapsed / valid.length;
-  const rem = dist - valid.length;
-  const tgt = getTargetSecs();
-  const req = rem > 0 ? (tgt * dist - elapsed) / rem : null;
-  return {
-    avg, req,
-    rem: Math.max(rem, 0),
-    proj: elapsed + avg * Math.max(rem, 0),
-    tgtTotal: tgt * dist,
-    pct: Math.min((valid.length / dist) * 100, 100),
-    done: valid.length >= dist,
-    ahead: rem <= 0,
-  };
-}
-
-function statusClass(req, tgt) {
-  if (req === null) return 'neutral';
-  const d = req - tgt;
-  if (d <= -30) return 'bad';
-  if (d < -5)   return 'warn';
-  return 'good';
-}
-
-// ─── Results ─────────────────────────────────────────────────────────────────
-function renderResults() {
-  const card = document.getElementById('results-card');
-  const valid = miles.filter(m => paceToSecs(m.min, m.sec) > 0);
-
-  if (!valid.length) {
-    card.innerHTML = '<div class="no-data">Save your first mile<br>to see required pace</div>';
-    return;
-  }
-
-  const totalSecs = valid.reduce((s,m) => s + paceToSecs(m.min,m.sec), 0);
-  const avgStr = secsToStr(totalSecs / valid.length);
-  const completedCount = valid.length;
-
-  let html = `
-    <div class="results-header">
-      <div class="results-title">Req. pace / distance</div>
-      <div class="avg-badge">Avg <span class="avg-val">${avgStr}/mi</span></div>
-    </div>`;
-
-  DISTANCES.forEach(dist => {
-    const res = calcForDist(dist);
-    if (!res) return;
-
-    const tgt = getTargetSecs();
-    const sc = statusClass(res.req, tgt);
-    const barColor = sc === 'good' ? 'var(--green)' : sc === 'warn' ? 'var(--accent)' : sc === 'bad' ? 'var(--accent3)' : 'var(--muted)';
-
-    // dim rows that are already complete or not yet reachable
-    const isDimmed = res.done;
-    const dimClass = isDimmed ? ' dimmed' : '';
-
-    const reqDisplay = res.ahead ? '✓' : secsToStr(res.req);
-    const reqClass = res.ahead ? 'good' : sc;
-
-    html += `
-      <div class="dist-row${dimClass}">
-        <div class="dist-label">${dist} mi</div>
-        <div class="dist-req ${reqClass}">${reqDisplay}</div>
-        <div class="dist-spacer"></div>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" style="width:${res.pct}%;background:${barColor}"></div>
+      <!-- Deep Forest — Dark -->
+      <div class="blend-card reveal">
+        <div class="blend-card-bg" style="background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80')"></div>
+        <div class="blend-card-overlay"></div>
+        <div class="blend-card-content">
+          <p class="blend-roast">Dark Roast</p>
+          <h3 class="blend-name">Deep Forest<br>Blend</h3>
+          <p class="blend-desc">Bold, smoky, and rich. Like standing in an old-growth grove at dawn with the mist still clinging to the ferns.</p>
+          <a href="#shop" class="blend-card-link">
+            Shop Now
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
-        <div class="dist-proj">
-          ${res.done
-            ? `<span class="dist-done">done</span>`
-            : `proj <span>${secsToStr(res.proj)}</span>`
-          }
+      </div>
+
+      <!-- Rocky Mountain — Medium -->
+      <div class="blend-card reveal" data-delay="80">
+        <div class="blend-card-bg" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80')"></div>
+        <div class="blend-card-overlay"></div>
+        <div class="blend-card-content">
+          <p class="blend-roast">Medium Roast</p>
+          <h3 class="blend-name">Rocky Mountain<br>Blend</h3>
+          <p class="blend-desc">Balanced and smooth with a clean finish. The everyday cup for those who wake up ready to move.</p>
+          <a href="#shop" class="blend-card-link">
+            Shop Now
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
-      </div>`;
-  });
+      </div>
 
-  card.innerHTML = html;
-}
+      <!-- Coastal — Light -->
+      <div class="blend-card reveal" data-delay="160">
+        <div class="blend-card-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80')"></div>
+        <div class="blend-card-overlay"></div>
+        <div class="blend-card-content">
+          <p class="blend-roast">Light Roast</p>
+          <h3 class="blend-name">Coastal<br>Blend</h3>
+          <p class="blend-desc">Bright and complex with citrus notes. Inspired by foggy Oregon mornings where the ocean meets the shore.</p>
+          <a href="#shop" class="blend-card-link">
+            Shop Now
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
 
-// ─── Init ────────────────────────────────────────────────────────────────────
-['tgt-min', 'tgt-sec'].forEach(id => {
-  const el = document.getElementById(id);
-  el.addEventListener('input', renderResults);
-  el.addEventListener('focus', function() { this.select(); });
-  el.addEventListener('touchstart', function() { setTimeout(() => this.select(), 0); }, {passive:true});
-});
-addMile();
-</script>
+      <!-- I5 — Espresso -->
+      <div class="blend-card reveal" data-delay="240">
+        <div class="blend-card-bg" style="background-image: url('https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=800&q=80')"></div>
+        <div class="blend-card-overlay"></div>
+        <div class="blend-card-content">
+          <p class="blend-roast">Espresso Roast</p>
+          <h3 class="blend-name">I5<br>Blend</h3>
+          <p class="blend-desc">Deep, intense, and punchy. The fuel for the long haul — named for the highway that runs the entire length of the Pacific Coast.</p>
+          <a href="#shop" class="blend-card-link">
+            Shop Now
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Shop CTA below grid -->
+    <div style="text-align:center; padding: 3rem 2rem 0;">
+      <p style="font-family: var(--font-head); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color: rgba(245,239,230,0.45); margin-bottom:1.2rem;">Can't decide?</p>
+      <a href="#shop" class="btn btn-outline reveal">Mix &amp; Match — 2 Bags</a>
+    </div>
+  </section>
+
+  <!-- =====================
+       STORY
+  ===================== -->
+  <section class="story-section" id="story">
+    <div class="section-inner">
+      <div class="story-grid">
+
+        <div class="story-images reveal">
+          <img
+            class="story-img-main"
+            src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800&q=80"
+            alt="Pacific Northwest forest"
+            loading="lazy"
+          />
+          <img
+            class="story-img-accent"
+            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80"
+            alt="Coffee being poured"
+            loading="lazy"
+          />
+          <div class="story-stat">
+            <span class="story-stat-num">838</span>
+            <span class="story-stat-label">Trees<br>Planted</span>
+          </div>
+        </div>
+
+        <div class="story-text">
+          <p class="section-label reveal">Our Story</p>
+          <h2 class="section-title reveal" data-delay="100">Born from the<br><em>Northwest.</em></h2>
+          <p class="section-body reveal" data-delay="200">
+            We're outdoor enthusiasts born and raised in the Pacific Northwest, and avid coffee people. Conquer Northwest started as the natural intersection of those two obsessions — a way to share the spirit of the PNW with people who love what we love.
+          </p>
+          <p class="section-body reveal" data-delay="280" style="margin-top:1rem;">
+            We source high-quality beans from reputable farms in South America and the coffee world's finest growing regions. Every bag ships fresh to your door — because your next adventure deserves a great cup.
+          </p>
+          <blockquote class="story-quote reveal" data-delay="360">
+            "The mountains seem to have conquered us long before we set foot on them."
+          </blockquote>
+          <p class="story-attribution reveal" data-delay="420">— Conrad Anker</p>
+          <div style="margin-top:2.5rem;" class="reveal" data-delay="480">
+            <a href="#story" class="btn btn-primary">Meet the Team</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================
+       DISCOVER THE PNW
+  ===================== -->
+  <section class="discover-section" id="discover">
+    <div class="section-inner">
+      <div class="discover-intro">
+        <div>
+          <p class="section-label reveal">Discover</p>
+          <h2 class="section-title reveal" data-delay="100">Your Next<br><em>PNW Adventure.</em></h2>
+        </div>
+        <div>
+          <p class="section-body reveal" data-delay="150">
+            Coffee is just the fuel. We're here to help you find the next waterfall, summit, or hidden lake that makes the Pacific Northwest worth conquering.
+          </p>
+        </div>
+      </div>
+
+      <div class="discover-grid">
+
+        <div class="discover-card reveal">
+          <div class="discover-card-bg" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80')"></div>
+          <div class="discover-card-content">
+            <div class="discover-card-icon">🏔️</div>
+            <h3 class="discover-card-title">Mountains</h3>
+            <p class="discover-card-count">Cascades · Olympics · Wallowas</p>
+          </div>
+        </div>
+
+        <div class="discover-card reveal" data-delay="80">
+          <div class="discover-card-bg" style="background-image: url('https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=800&q=80')"></div>
+          <div class="discover-card-content">
+            <div class="discover-card-icon">💧</div>
+            <h3 class="discover-card-title">Waterfalls</h3>
+            <p class="discover-card-count">Multnomah · Silver Falls · Sol Duc</p>
+          </div>
+        </div>
+
+        <div class="discover-card reveal" data-delay="160">
+          <div class="discover-card-bg" style="background-image: url('https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&q=80')"></div>
+          <div class="discover-card-content">
+            <div class="discover-card-icon">🏞️</div>
+            <h3 class="discover-card-title">Lakes</h3>
+            <p class="discover-card-count">Crater · Waldo · Diablo</p>
+          </div>
+        </div>
+
+        <div class="discover-card reveal" data-delay="240">
+          <div class="discover-card-bg" style="background-image: url('https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80')"></div>
+          <div class="discover-card-content">
+            <div class="discover-card-icon">🗿</div>
+            <h3 class="discover-card-title">Landmarks</h3>
+            <p class="discover-card-count">Coast · Gorge · High Desert</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center; margin-top:3rem;" class="reveal">
+        <a href="#discover" class="btn btn-outline">Browse All Destinations</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================
+       GEAR / AFFILIATE
+  ===================== -->
+  <section class="gear-section" id="gear">
+    <div class="section-inner">
+      <p class="section-label reveal">Gear We Love</p>
+      <h2 class="section-title reveal" data-delay="100">Brew Better.<br><em>Go Further.</em></h2>
+      <p class="section-body reveal" data-delay="200">
+        The right gear matters — whether you're pulling shots at home or brewing at a trailhead. These are our go-to picks, field-tested in the PNW.
+      </p>
+
+      <div class="gear-grid">
+
+        <div class="gear-card reveal" data-delay="100">
+          <div class="gear-icon">☕</div>
+          <h3 class="gear-title">Pour-Over Kits</h3>
+          <p class="gear-desc">The Hario V60 and Chemex make every cup a ritual. Worth every penny for the full flavor of our light and medium roasts.</p>
+          <a href="https://www.amazon.com/s?k=pour+over+coffee+kit&tag=YOUR_AMAZON_TAG" target="_blank" rel="noopener" class="gear-link">
+            Shop on Amazon
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="gear-card reveal" data-delay="180">
+          <div class="gear-icon">🌡️</div>
+          <h3 class="gear-title">Gooseneck Kettles</h3>
+          <p class="gear-desc">Precision pour matters. A quality kettle with temp control unlocks flavors in specialty coffee you didn't know were there.</p>
+          <a href="https://www.amazon.com/s?k=gooseneck+kettle+coffee&tag=YOUR_AMAZON_TAG" target="_blank" rel="noopener" class="gear-link">
+            Shop on Amazon
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="gear-card reveal" data-delay="260">
+          <div class="gear-icon">⚙️</div>
+          <h3 class="gear-title">Burr Grinders</h3>
+          <p class="gear-desc">Fresh ground is non-negotiable. A good burr grinder is the single best upgrade any coffee drinker can make.</p>
+          <a href="https://www.amazon.com/s?k=burr+coffee+grinder&tag=YOUR_AMAZON_TAG" target="_blank" rel="noopener" class="gear-link">
+            Shop on Amazon
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="gear-card reveal" data-delay="100">
+          <div class="gear-icon">🎒</div>
+          <h3 class="gear-title">Trail Packs</h3>
+          <p class="gear-desc">The right daypack changes everything on the trail. We're fans of Osprey and Gregory for PNW conditions.</p>
+          <a href="https://www.amazon.com/s?k=hiking+daypack+osprey&tag=YOUR_AMAZON_TAG" target="_blank" rel="noopener" class="gear-link">
+            Shop on Amazon
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="gear-card reveal" data-delay="180">
+          <div class="gear-icon">🫙</div>
+          <h3 class="gear-title">Insulated Flasks</h3>
+          <p class="gear-desc">A Hydro Flask or Stanley keeps your morning brew hot from the trailhead to the summit. No compromises.</p>
+          <a href="https://www.amazon.com/s?k=hydro+flask+coffee&tag=YOUR_AMAZON_TAG" target="_blank" rel="noopener" class="gear-link">
+            Shop on Amazon
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="gear-card reveal" data-delay="260">
+          <div class="gear-icon">🔥</div>
+          <h3 class="gear-title">Camp Brewing</h3>
+          <p class="gear-desc">The AeroPress Go and JetBoil combo is unbeatable for backcountry brewing. Great coffee anywhere you can get water.</p>
+          <a href="https://www.amazon.com/s?k=aeropress+go+camp+coffee&tag=YOUR_AMAZON_TAG" target="_blank" rel="noopener" class="gear-link">
+            Shop on Amazon
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================
+       PLEDGE SECTION
+  ===================== -->
+  <section class="pledge-section">
+    <div class="section-label reveal" style="text-align:center;">Our Pledge</div>
+    <h2 class="section-title reveal" data-delay="100" style="text-align:center; margin:0 auto 1rem;">
+      Every Order.<br><em>One More Tree.</em>
+    </h2>
+    <p class="section-body reveal" data-delay="200" style="text-align:center; margin: 0 auto 2rem; max-width:520px;">
+      We believe in keeping the Northwest green. Every order we receive triggers a tree planted right here in the Pacific Northwest through our partnership with One Tree Planted.
+    </p>
+
+    <div class="pledge-counter reveal" data-delay="300">
+      <div>
+        <div class="pledge-num">0</div>
+      </div>
+      <div class="pledge-label">Trees<br>Planted<br><span style="opacity:0.6; font-weight:400;">& counting</span></div>
+    </div>
+
+    <div class="reveal" data-delay="400">
+      <a href="https://onetreeplanted.org/pages/why-trees" target="_blank" rel="noopener" class="btn btn-outline">
+        Learn About One Tree Planted
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- =====================
+       FOOTER
+  ===================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <p class="nav-logo" style="font-size:1.05rem; display:flex; align-items:center; gap:0.5rem;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#c49a3c"/>
+          </svg>
+          Conquer <span class="logo-accent">&nbsp;Northwest Coffee</span>
+        </p>
+        <p>Created for the adventurous, coffee-loving soul in all of us. Pacific Northwest born and brewed.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/conquernorthwestcoffee/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.facebook.com/conquernorthwestcoffee" target="_blank" rel="noopener" class="social-link" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="#blends">Coffee Blends</a>
+        <a href="#discover">Discover PNW</a>
+        <a href="#gear">Gear Picks</a>
+        <a href="#story">Our Story</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#story">About Us</a>
+        <a href="mailto:hello@conquernorthwestcoffee.com">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>©2025 Conquer Northwest Coffee Company, LLC. All Rights Reserved.</p>
+      <div style="display:flex; gap:1.5rem;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
