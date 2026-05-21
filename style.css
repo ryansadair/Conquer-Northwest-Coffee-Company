@@ -970,3 +970,53 @@ section { position: relative; }
   .hero-badge { display: none; }
   .pledge-counter { padding: 1rem 1.5rem; }
 }
+/* =====================
+   NAV PLEDGE INTEGRATION
+===================== */
+.nav {
+  padding: 0 1.5rem;
+  height: 82px;                    /* Slightly taller to fit pledge */
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-pledge {
+  font-family: var(--font-head);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a8c99a;
+  background: rgba(58, 92, 42, 0.65);
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;               /* Pushes it to the right */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.nav.scrolled {
+  height: 72px;
+  padding: 0 1.5rem;
+}
+
+/* Hide pledge on small screens */
+@media (max-width: 900px) {
+  .nav-pledge {
+    display: none;
+  }
+  
+  .nav {
+    height: 72px;
+  }
+}
+
+/* Make sure mobile menu still works well */
+@media (max-width: 900px) {
+  .nav {
+    gap: 1rem;
+  }
+}
