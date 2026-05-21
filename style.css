@@ -1020,3 +1020,27 @@ section { position: relative; }
     gap: 1rem;
   }
 }
+/* =========================================
+   GEAR SECTION - Make Links Clickable
+========================================= */
+.gear-card .gear-link {
+  position: relative;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gold) !important;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.gear-card .gear-link:hover {
+  color: var(--cream) !important;
+  gap: 0.8rem;
+}
