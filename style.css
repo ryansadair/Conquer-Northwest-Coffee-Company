@@ -185,7 +185,8 @@ body::before {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 2rem;
-  padding-top: 30px;
+  padding-top: 40px;           /* Try 40px first */
+  padding-bottom: 2rem;
 }
 
 .hero-eyebrow {
