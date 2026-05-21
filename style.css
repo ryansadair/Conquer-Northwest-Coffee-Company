@@ -148,7 +148,7 @@ body::before {
 
 .nav-hamburger span {
   width: 24px; height: 2px;
-  background: var(--cream);
+  background: var(--black);
   transition: var(--transition);
 }
 
