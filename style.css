@@ -169,7 +169,7 @@ body::before {
   inset: 0;
   background:
     linear-gradient(135deg, rgba(13,26,13,0.45) 0%, rgba(44,26,14,0.45) 60%, rgba(13,26,13,0.45) 100%),
-    url('deep-forest-image.jph') center/cover no-repeat;
+    url('deep-forest-image.jpg') center/cover no-repeat;
   transform: scale(1.05);
   animation: heroZoom 20s ease-in-out infinite alternate;
 }
