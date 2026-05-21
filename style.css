@@ -1020,21 +1020,3 @@ section { position: relative; }
     gap: 1rem;
   }
 }
-/* Coffee Page Shop Now Button */
-.blend-card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-head);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gold);
-  transition: all 0.3s ease;
-}
-
-.blend-card-link:hover {
-  color: var(--cream);
-  gap: 0.7rem;
-}
