@@ -1020,3 +1020,51 @@ section { position: relative; }
     gap: 1rem;
   }
 }
+/* =========================================
+   COFFEE PAGE PRODUCT CARDS & BUTTONS
+========================================= */
+
+/* Make Shop Now buttons match homepage */
+.product-footer .blend-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-head);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  transition: all var(--transition);
+}
+
+.product-footer .blend-card-link:hover {
+  color: var(--cream);
+  gap: 0.7rem;
+}
+
+/* Better card layout */
+.shop-grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+}
+
+.product-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 1.8rem;
+  margin-top: auto;
+}
+
+.product-price {
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+/* Optional: Better spacing on coffee page */
+.shop-section .section-inner {
+  padding-top: 1rem;
+}
