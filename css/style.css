@@ -169,7 +169,7 @@ body::before {
   inset: 0;
   background:
     linear-gradient(135deg, rgba(13,26,13,0.85) 0%, rgba(44,26,14,0.6) 60%, rgba(13,26,13,0.9) 100%),
-    url('Conquer Northwest Coffee - Header Image.jpg') center/cover no-repeat;
+    url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1600&q=80') center/cover no-repeat;
   transform: scale(1.05);
   animation: heroZoom 20s ease-in-out infinite alternate;
 }
