@@ -258,6 +258,62 @@
     }
     .back-link:hover { color: var(--cream); }
 
+    /* Variant selector */
+    .variant-selector { margin-bottom: 1.2rem; }
+    .variant-label {
+      font-family: var(--font-head);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245,239,230,0.45);
+      margin-bottom: 0.6rem;
+    }
+    .variant-options { display: flex; gap: 0.6rem; }
+    .variant-btn {
+      font-family: var(--font-head);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.2rem;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(245,239,230,0.5);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .variant-btn:hover {
+      border-color: rgba(196,154,60,0.5);
+      color: var(--cream);
+    }
+    .variant-btn.active {
+      background: rgba(196,154,60,0.12);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Subscription teaser */
+    .subscription-teaser {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      background: rgba(107,143,78,0.08);
+      border: 1px solid rgba(107,143,78,0.25);
+      padding: 0.9rem 1.1rem;
+      margin-top: 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 0.82rem;
+      color: rgba(245,239,230,0.55);
+      line-height: 1.5;
+    }
+    .subscription-teaser svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: var(--sage);
+    }
+    .subscription-teaser strong { color: var(--sage); font-weight: 700; }
+
     /* ── DETAIL STRIP ── */
     .detail-strip {
       background: var(--forest);
@@ -487,11 +543,24 @@
           <span class="price-main">$16</span>
           <span class="price-sub">.00</span>
         </div>
-        <p class="size-note">12 oz · Whole Bean or Ground</p>
+        <p class="size-note">12 oz · Free shipping on orders over $35</p>
+
+        <!-- Grind variant selector -->
+        <div class="variant-selector">
+          <p class="variant-label">Grind</p>
+          <div class="variant-options">
+            <button class="variant-btn active" onclick="selectVariant(this)">Whole Bean</button>
+            <button class="variant-btn" onclick="selectVariant(this)">Ground</button>
+          </div>
+        </div>
 
         <!-- ════════════════════════════════════════════════
              SHOPIFY BUY BUTTON — replace this entire block
              with your Shopify embed code for this product.
+             When you add the Shopify embed, make sure your
+             Buy Button is configured to show the grind
+             variant dropdown natively — then remove the
+             variant selector above.
              ════════════════════════════════════════════════ -->
         <div class="shopify-slot">
           <p class="shopify-slot-label">Shopify Buy Button — paste embed here</p>
@@ -499,6 +568,12 @@
             Add to Cart
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           </button>
+        </div>
+
+        <!-- Subscription teaser -->
+        <div class="subscription-teaser">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <span><strong>Subscribe &amp; Save — Coming Soon.</strong> Set it and forget it. Never run out of your morning cup.</span>
         </div>
 
         <a href="coffee.html" class="back-link">
@@ -522,7 +597,7 @@
       </div>
       <div class="detail-col reveal" data-delay="200">
         <h3 class="detail-title">One Tree Planted</h3>
-        <p class="detail-body">Every order triggers a tree planted in the Pacific Northwest through our partnership with One Tree Planted.</p>
+        <p class="detail-body">Every order triggers a tree planted in the Pacific Northwest through our partnership with One Tree Planted. 838 and counting.</p>
       </div>
     </div>
   </div>
@@ -597,7 +672,7 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <img src="nw-white.png" alt="Conquer Northwest Coffee" style="height:50px; width:auto; display:block; margin-bottom:0.5rem;" />
+        <img src="Logo-White.png" alt="Conquer Northwest Coffee" style="height:50px; width:auto; display:block; margin-bottom:0.5rem;" />
         <p>Created for the adventurous, coffee-loving soul in all of us. Pacific Northwest born and brewed.</p>
         <div class="footer-social">
           <a href="https://www.instagram.com/conquernorthwestcoffee/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
@@ -629,5 +704,9 @@
   </footer>
 
   <script src="main.js"></script>
-</body>
-</html>
+  <script>
+    function selectVariant(btn) {
+      btn.closest('.variant-options').querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
