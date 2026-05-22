@@ -143,12 +143,20 @@ body::before {
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
-  padding: 4px;
+  padding: 8px 10px;
+  background: rgba(196,154,60,0.15);
+  border: 1px solid rgba(196,154,60,0.35);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.nav-hamburger:hover {
+  background: rgba(196,154,60,0.25);
+  border-color: rgba(196,154,60,0.6);
 }
 
 .nav-hamburger span {
-  width: 24px; height: 2px;
-  background: var(--black);
+  width: 22px; height: 2px;
+  background: var(--gold);
   transition: var(--transition);
 }
 
@@ -185,8 +193,8 @@ body::before {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 2rem;
-  padding-top: 40px;           /* Try 40px first */
-  padding-bottom: 2rem;
+  padding-top: 40px !important;     /* Adjust this number */
+  padding-bottom: 2rem !important;
 }
 
 .hero-eyebrow {
