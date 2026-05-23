@@ -96,6 +96,20 @@
     @media (max-width: 700px) {
       .values-grid { grid-template-columns: 1fr; }
       .team-grid { grid-template-columns: 1fr; }
+
+      /* Mission section: stack vertically on mobile */
+      .mission-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      /* Hide the coffee image on mobile — text is enough */
+      .mission-image {
+        display: none;
+      }
+      /* Tighten section padding on mobile */
+      .section-inner {
+        padding: 3.5rem 1.5rem;
+      }
     }
   </style>
 </head>
@@ -139,7 +153,7 @@
   <!-- Mission -->
   <section style="background: var(--deep);">
     <div class="section-inner">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;">
+      <div class="mission-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;">
         <div>
           <p class="section-label reveal">Our Mission</p>
           <h2 class="section-title reveal" data-delay="100">More than<br><em>a coffee company.</em></h2>
@@ -154,7 +168,7 @@
           </p>
           <p class="story-attribution reveal" data-delay="420" style="padding-left:0; margin-top:1.5rem;">— Ryan &amp; Kaitlyn Adair</p>
         </div>
-        <div class="reveal" data-delay="200">
+        <div class="mission-image reveal" data-delay="200">
           <img
             src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80"
             alt="Coffee being poured"
