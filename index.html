@@ -12,57 +12,86 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <style>
+    /* ── Fix blends section header — remove excess bottom padding ── */
+    .blends-section .section-inner {
+      padding-bottom: 2rem;
+    }
+
+    /* ── Blend grid: fix width overflow on mobile ── */
+    .blends-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0 !important;
+      margin-top: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      border: none !important;
+    }
+
     /* ── Blend cards: always show content, no hover-reveal ── */
     .blend-card {
-      min-height: 480px; /* taller cards */
+      min-height: 460px;
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      width: 100% !important;
+      aspect-ratio: unset !important;
     }
+
     /* Stronger overlay so text is always legible */
     .blend-card-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(
         to top,
-        rgba(8, 18, 8, 0.88) 0%,
-        rgba(8, 18, 8, 0.55) 50%,
+        rgba(8, 18, 8, 0.92) 0%,
+        rgba(8, 18, 8, 0.6) 45%,
         rgba(8, 18, 8, 0.15) 100%
       );
-      transition: opacity 0.4s ease;
     }
-    .blend-card:hover .blend-card-overlay {
-      opacity: 0.85;
-    }
-    /* Always visible content — remove any opacity/transform hiding */
+
+    /* Always visible content */
     .blend-card-content {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 2rem 1.8rem;
+      padding: 1.4rem 1.2rem;
       z-index: 2;
       opacity: 1 !important;
       transform: none !important;
       transition: none !important;
     }
+
     /* Always show description */
     .blend-desc {
       display: block !important;
       opacity: 1 !important;
       max-height: none !important;
       overflow: visible !important;
-      margin-bottom: 1.2rem;
-      font-size: 0.88rem;
-      line-height: 1.6;
-      color: rgba(245, 239, 230, 0.8);
+      margin-bottom: 1rem;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: rgba(245, 239, 230, 0.85);
     }
+
     /* Always show shop now link */
     .blend-card-link {
       display: inline-flex !important;
       opacity: 1 !important;
       transform: none !important;
+      margin-top: 0.2rem;
+      font-size: 0.72rem !important;
     }
+
+    /* Blend name slightly smaller on mobile so it doesn't crowd */
+    .blend-name {
+      font-size: 1.35rem;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
     /* Subtle image zoom on hover only */
     .blend-card-bg {
       position: absolute;
@@ -74,10 +103,23 @@
     .blend-card:hover .blend-card-bg {
       transform: scale(1.04);
     }
-    /* Mobile: single column, keep cards tall enough */
-    @media (max-width: 700px) {
+
+    /* Desktop: taller cards, bigger text */
+    @media (min-width: 700px) {
       .blend-card {
-        min-height: 420px;
+        min-height: 560px;
+      }
+      .blend-card-content {
+        padding: 2rem 1.8rem;
+      }
+      .blend-name {
+        font-size: 1.6rem;
+      }
+      .blend-desc {
+        font-size: 0.88rem;
+      }
+      .blend-card-link {
+        font-size: 0.78rem !important;
       }
     }
   </style>
