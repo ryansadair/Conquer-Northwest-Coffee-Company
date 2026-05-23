@@ -11,6 +11,76 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    /* ── Blend cards: always show content, no hover-reveal ── */
+    .blend-card {
+      min-height: 480px; /* taller cards */
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    /* Stronger overlay so text is always legible */
+    .blend-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(8, 18, 8, 0.88) 0%,
+        rgba(8, 18, 8, 0.55) 50%,
+        rgba(8, 18, 8, 0.15) 100%
+      );
+      transition: opacity 0.4s ease;
+    }
+    .blend-card:hover .blend-card-overlay {
+      opacity: 0.85;
+    }
+    /* Always visible content — remove any opacity/transform hiding */
+    .blend-card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem 1.8rem;
+      z-index: 2;
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    /* Always show description */
+    .blend-desc {
+      display: block !important;
+      opacity: 1 !important;
+      max-height: none !important;
+      overflow: visible !important;
+      margin-bottom: 1.2rem;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: rgba(245, 239, 230, 0.8);
+    }
+    /* Always show shop now link */
+    .blend-card-link {
+      display: inline-flex !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    /* Subtle image zoom on hover only */
+    .blend-card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.6s ease;
+    }
+    .blend-card:hover .blend-card-bg {
+      transform: scale(1.04);
+    }
+    /* Mobile: single column, keep cards tall enough */
+    @media (max-width: 700px) {
+      .blend-card {
+        min-height: 420px;
+      }
+    }
+  </style>
 </head>
 <body>
 
