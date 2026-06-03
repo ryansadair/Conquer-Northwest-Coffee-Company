@@ -286,7 +286,7 @@
       </div>
       <div class="purchase-block">
         <div class="price-row">
-          <span class="price-main">$18</span>
+          <span class="price-main">$16</span>
           <span class="price-sub">.00</span>
         </div>
         <p class="size-note">12 oz</p>
@@ -295,12 +295,15 @@
         <div class="variant-selector">
           <p class="variant-label">Grind</p>
           <div class="variant-options">
-            <button class="variant-btn active" onclick="selectVariant(this)">Whole Bean</button>
-            <button class="variant-btn" onclick="selectVariant(this)">Ground</button>
+            <button class="variant-btn active"
+              onclick="selectVariant(this, 'https://buy.stripe.com/9B628j8fd0oxgjeeAT9oc07')">Whole Bean</button>
+            <button class="variant-btn"
+              onclick="selectVariant(this, 'https://buy.stripe.com/4gM8wH7b98V31okgJ19oc08')">Ground</button>
           </div>
         </div>
 
-        <a href="https://buy.stripe.com/7sY00b9jhdbj9UQ3Wf9oc02"
+        <a id="order-btn"
+           href="https://buy.stripe.com/9B628j8fd0oxgjeeAT9oc07"
            target="_blank"
            rel="noopener"
            class="shopify-temp-btn">
@@ -377,7 +380,7 @@
           </div>
           <div class="cs-body">
             <p class="cs-name">Deep Forest Blend</p>
-            <p class="cs-price">$18.00 · 12 oz</p>
+            <p class="cs-price">$16.00 · 12 oz</p>
           </div>
         </a>
         <a href="rocky-mountain.html" class="cs-card reveal" data-delay="160">
@@ -387,7 +390,7 @@
           </div>
           <div class="cs-body">
             <p class="cs-name">Rocky Mountain Blend</p>
-            <p class="cs-price">$18.00 · 12 oz</p>
+            <p class="cs-price">$16.00 · 12 oz</p>
           </div>
         </a>
         <a href="i5.html" class="cs-card reveal" data-delay="240">
@@ -397,7 +400,7 @@
           </div>
           <div class="cs-body">
             <p class="cs-name">I5 Blend</p>
-            <p class="cs-price">$18.00 · 12 oz</p>
+            <p class="cs-price">$16.00 · 12 oz</p>
           </div>
         </a>
       </div>
@@ -440,9 +443,10 @@
 
   <script src="main.js"></script>
   <script>
-    function selectVariant(btn) {
+    function selectVariant(btn, url) {
       btn.closest('.variant-options').querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      document.getElementById('order-btn').href = url;
     }
   </script>
 </body>
