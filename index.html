@@ -1,13 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B097F31GJQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-B097F31GJQ');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Conquer Northwest Coffee — Premium Pacific Northwest coffee for the adventurous soul. Explore PNW trails, waterfalls, and mountains fueled by exceptional coffee." />
+  <meta name="description" content="Conquer Northwest Coffee — Premium Pacific Northwest coffee for the adventurous soul. Fresh-roasted small-batch blends shipped to your door. A tree planted with every order." />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://conquernorthwestcoffee.com/" />
+
+  <!-- Open Graph -->
   <meta property="og:title" content="Conquer Northwest Coffee | Fuel Your Adventure" />
-  <meta property="og:description" content="Premium Pacific Northwest coffee for the adventurous soul. A tree planted with every order." />
+  <meta property="og:description" content="Premium Pacific Northwest coffee for the adventurous soul. Small-batch blends roasted in Bend, OR. A tree planted with every order." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://conquernorthwestcoffee.com/" />
+  <meta property="og:image" content="https://conquernorthwestcoffee.com/og-homepage.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Conquer Northwest Coffee — Pacific Northwest landscape with coffee" />
+  <meta property="og:site_name" content="Conquer Northwest Coffee" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Conquer Northwest Coffee | Fuel Your Adventure" />
+  <meta name="twitter:description" content="Premium Pacific Northwest coffee for the adventurous soul. A tree planted with every order." />
+  <meta name="twitter:image" content="https://conquernorthwestcoffee.com/og-homepage.jpg" />
+
   <title>Conquer Northwest Coffee | Fuel Your Adventure</title>
+
+  <!-- JSON-LD: Organization + WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://conquernorthwestcoffee.com/#organization",
+        "name": "Conquer Northwest Coffee Company",
+        "url": "https://conquernorthwestcoffee.com",
+        "logo": "https://conquernorthwestcoffee.com/Logo-White.png",
+        "description": "Premium Pacific Northwest coffee for the adventurous soul. Small-batch blends roasted in Bend, Oregon.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Springfield",
+          "addressRegion": "OR",
+          "addressCountry": "US"
+        },
+        "sameAs": [
+          "https://www.instagram.com/conquernorthwestcoffee/",
+          "https://www.facebook.com/conquernorthwestcoffee"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "conquernorthwestcoffee@gmail.com",
+          "contactType": "Customer Service"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://conquernorthwestcoffee.com/#website",
+        "url": "https://conquernorthwestcoffee.com",
+        "name": "Conquer Northwest Coffee",
+        "publisher": { "@id": "https://conquernorthwestcoffee.com/#organization" }
+      }
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
