@@ -1,0 +1,285 @@
+/* Conquer Northwest Coffee — cart (sandbox build).
+   Uses the site's CSS variables from style.css. */
+
+/* ── Nav cart button ── */
+.cnwc-cart-btn {
+  position: relative;
+  background: transparent;
+  border: 1px solid rgba(196,154,60,0.4);
+  color: var(--gold);
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+.cnwc-cart-btn:hover { background: rgba(196,154,60,0.12); transform: translateY(-1px); }
+.cnwc-cart-count {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: var(--gold);
+  color: var(--deep);
+  font-family: var(--font-head);
+  font-size: 0.68rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.cnwc-cart-count.is-zero { display: none; }
+
+/* ── Overlay + drawer ── */
+.cnwc-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+}
+.cnwc-overlay.open { opacity: 1; pointer-events: auto; }
+
+.cnwc-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: min(420px, 94vw);
+  background: var(--deep);
+  border-left: 1px solid rgba(196,154,60,0.25);
+  z-index: 2001;
+  transform: translateX(102%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+}
+.cnwc-drawer.open { transform: translateX(0); }
+
+.cnwc-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.cnwc-drawer-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--warm-white);
+  margin: 0;
+}
+.cnwc-close {
+  background: transparent;
+  border: none;
+  color: rgba(245,239,230,0.5);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+}
+.cnwc-close:hover { color: var(--gold); }
+
+.cnwc-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+}
+.cnwc-empty {
+  text-align: center;
+  color: rgba(245,239,230,0.45);
+  font-size: 0.95rem;
+  padding: 3rem 1rem;
+  line-height: 1.7;
+}
+.cnwc-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.cnwc-item-name {
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+}
+.cnwc-item-grind {
+  font-size: 0.8rem;
+  color: rgba(245,239,230,0.45);
+  grid-column: 1;
+}
+.cnwc-item-price {
+  font-family: var(--font-head);
+  font-weight: 700;
+  color: var(--gold);
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+.cnwc-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  grid-column: 1;
+  margin-top: 0.3rem;
+}
+.cnwc-qty button {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--cream);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cnwc-qty button:hover { border-color: var(--gold); color: var(--gold); }
+.cnwc-qty span {
+  font-family: var(--font-head);
+  font-weight: 700;
+  min-width: 1.5rem;
+  text-align: center;
+}
+.cnwc-remove {
+  background: none;
+  border: none;
+  color: rgba(245,239,230,0.35);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+}
+.cnwc-remove:hover { color: var(--gold); }
+
+.cnwc-foot {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 1.2rem 1.5rem 1.5rem;
+}
+.cnwc-subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.3rem;
+  font-family: var(--font-head);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245,239,230,0.6);
+}
+.cnwc-subtotal strong {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--warm-white);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.cnwc-ship-note {
+  font-size: 0.75rem;
+  color: rgba(245,239,230,0.4);
+  margin-bottom: 1rem;
+}
+.cnwc-checkout {
+  width: 100%;
+  background: var(--gold);
+  color: var(--deep);
+  border: none;
+  font-family: var(--font-head);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+.cnwc-checkout:hover:not(:disabled) { background: var(--amber); transform: translateY(-2px); }
+.cnwc-checkout:disabled { opacity: 0.45; cursor: not-allowed; }
+.cnwc-continue {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: rgba(245,239,230,0.5);
+  font-family: var(--font-head);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.8rem;
+  cursor: pointer;
+}
+.cnwc-continue:hover { color: var(--gold); }
+.cnwc-error {
+  color: #e08a8a;
+  font-size: 0.82rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+/* ── Blend-page "Add to Cart" (secondary to Order Now) ── */
+.cnwc-add-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(196,154,60,0.55);
+  color: var(--gold);
+  font-family: var(--font-head);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+.cnwc-add-btn:hover { background: rgba(196,154,60,0.12); transform: translateY(-2px); }
+.cnwc-add-btn.added { border-color: var(--sage); color: var(--sage); }
+
+/* ── Shop-page quick add ── */
+.product-footer { flex-wrap: wrap; }
+.cnwc-quick-add {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  flex-basis: 100%;
+}
+.cnwc-quick-add button {
+  flex: 1;
+  white-space: nowrap;
+  background: transparent;
+  border: 1px solid rgba(196,154,60,0.4);
+  color: var(--gold);
+  font-family: var(--font-head);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.4rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.cnwc-quick-add button:hover { background: rgba(196,154,60,0.12); }
